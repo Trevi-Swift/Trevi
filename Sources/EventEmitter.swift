@@ -21,25 +21,31 @@ typealias EmiiterType = ((AnyObject) -> Void)?
 
 
 /*
-    This class is an asynchronous data it uses to communicate, and passed to register and invokes the event.
-    But now, because there is a limit of the type of all can't transmit the data. Will quickly change to have it
-*/
+ This class is an asynchronous data it uses to communicate, and passed to register and invokes the event.
+ But now, because there is a limit of the type of all can't transmit the data. Will quickly change to have it
+ */
 
 public class EventEmitter{
     
     var events = [String:Any]()
     
     init(){
-    
+        
     }
     
     deinit{
         
     }
     
-    //register event function with name
+    ///
+    /// register event function with name
+    ///
+    /// - Parameter name: The name of registed event
+    /// - Parameter emitter: event be going to registed
+    ///
+    ///
     func on(name: String, _ emitter: Any){
-
+        
         guard events[name] == nil  else{
             print("already contain event")
             return
@@ -48,56 +54,74 @@ public class EventEmitter{
         events[name] = emitter
     }
     
+    ///
+    /// remove event funtion registered
+    ///
+    /// - Parameter name: The name of stored event
+    ///
+    ///
     func removeEvent(name: String){
         events.removeValueForKey(name)
     }
     
-    //invoke registed event with Parameters
-    func emit(name: String, _ arg : AnyObject...){
+    
+    ///
+    /// invoke registed event with Parameters
+    ///
+    /// - Parameter name: The name if be going to invoke event
+    /// - Parameter arguments: Data send on event
+    ///
+    ///
+    func emit(name: String, _ arguments : AnyObject...){
         let emitter = events[name]
-
+        
         switch emitter {
-        case let cb as HttpCallback:
+        case let callback as HttpCallback:
             
-            if arg.count == 2{
-                let req = arg[0] as! IncomingMessage
-                let res = arg[1] as! ServerResponse
-                cb(req,res, nil)
+            if arguments.count == 2{
+                
+                let request = arguments[0] as! IncomingMessage
+                let response = arguments[1] as! ServerResponse
+                callback(request,response, nil)
+                
+            } else if arguments.count == 3{
+                let request = arguments[0] as! IncomingMessage
+                let response = arguments[1] as! ServerResponse
+                let next = arguments[2] as! NextCallback
+                callback(request,response, next)
             }
-            break
             
-        case let cb as emitable:
-            if arg.count == 1 {
-                cb(arg.first!)
+        case let callback as emitable:
+            if arguments.count == 1 {
+                callback(arguments.first!)
             }else {
                 #if os(Linux)
-                    cb(arg as! AnyObject)
+                    callback(arguments as! AnyObject)
                 #else
-                    cb(arg)
+                    callback(arguments)
                 #endif
             }
-            break
-        case let cb as oneStringeEvent:
-            if arg.count == 1 {
+            
+        case let callback as oneStringeEvent:
+            if arguments.count == 1 {
                 #if os(Linux)
-                    let str = arg.first as! StringWrapper
-                    cb(str.string)
+                    let str = arguments.first as! StringWrapper
+                    callback(str.string)
                 #else
-                    cb(arg.first as! String)
+                    callback(arguments.first as! String)
                 #endif
             }
-            break
-        case let cb as oneDataEvent:
-            if arg.count == 1 {
-                cb(arg.first as! NSData)
+            
+        case let callback as oneDataEvent:
+            if arguments.count == 1 {
+                callback(arguments.first as! NSData)
             }
-            break
-
-        case let cb as noParamsEvent:
-            cb()
-            break
+            
+        case let callback as noParamsEvent:
+            callback()
             
         default:
+            print("There is no event")
             break
         }
     }

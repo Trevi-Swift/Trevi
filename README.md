@@ -6,8 +6,8 @@
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 
 ## Overview
-Fast, light web application server framwork for Swift. Trevi uses an event-driven, non-blocking I/O model based on libuv (https://github.com/libuv/libuv).  
-Trevi refers to node.js core modules and makes Trevi core modules similary to support node.js features. Trevi also hopes that node.js developers easily use and develop Trevi.  
+Fast, light web application server framework for Swift. Trevi uses an event-driven, non-blocking I/O model based on libuv (https://github.com/libuv/libuv).  
+Trevi refers to node.js core modules and makes Trevi core modules similar to support node.js features. Trevi also hopes that node.js developers easily use and develop Trevi.  
 
 ## Notice
 If you want to build or test all projects at Xcode, please check out [Trevi-Dev](https://github.com/Trevi-Swift/Trevi-Dev). 
@@ -121,8 +121,8 @@ Trevi works with the latest version of Swift 3.0 or latest Snapshot. You can dow
     
 2. Initialize this project as a new Swift package project
     ```bash
-    cd HelloTrevi
-    swift build --init
+    $ cd HelloTrevi
+    $ swift build --init
     ```
     
     Now your directory structure under HelloTrevi should look like this :
@@ -144,42 +144,41 @@ Trevi works with the latest version of Swift 3.0 or latest Snapshot. You can dow
         name: "HelloTrevi",
         dependencies: [
           .Package(url: "https://github.com/Trevi-Swift/Trevi.git", versions: Version(0,1,0)..<Version(0,2,0)),
-        ])
+        ]
+    )
     ```
 
 4. Import the modules, create and start a HTTPServer in your code (Sources/main.swift) :
     ```swift
     import Trevi
-    
+
     let server = Http ()
-    
+
     server.createServer({ (req, res, next) in
-        var data = ""
-        func ondata(chunk: String){
-            data += chunk
-        }
-        func onend(){
-            res.write(data)
-            res.end()
-        }
-        req.on("data", ondata)
-        req.on("end", onend)
-    }).listen(8080)
+        res.statusCode = 200
+        res.write("Hello Trevi")
+        res.end()
+    }).listen(8081)
     ```
 5. Build your application :
     - Mac OS X:  
         ```bash
-        swift build -Xcc -fblocks -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
+        $ swift build -Xcc -fblocks -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
         ```
         
     - Ubuntu:  
         ```bash
-        swift build -Xcc -fblocks
+        $ swift build -Xcc -fblocks
         ```
 
 6. Now run your application:
     ```bash
-    .build/debug/HelloTrevi
+    $ .build/debug/HelloTrevi
+    ```
+
+    Note: May need to set LD_LIBRARY_PATH environment variable to run:
+    ```bash
+    $ export LD_LIBRARY_PATH=/usr/local/lib/:/usr/lib:$LD_LIBRARY_PATH
     ```
 
 7. Open your browser at [http://localhost:8080](http://localhost:8080)

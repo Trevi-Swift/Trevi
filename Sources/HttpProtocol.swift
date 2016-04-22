@@ -182,7 +182,7 @@ public enum StatusCode: Int {
 */
 public class Mime {
     
-    class func type(key: String) -> String {
+    public class func mimeType(key: String) -> String {
         
         var mType = [
             
@@ -390,7 +390,6 @@ public class Mime {
         }
         
         return ""
-    
     }
     
 }

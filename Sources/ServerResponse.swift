@@ -92,9 +92,9 @@ public class ServerResponse: OutgoingMessage{
         onFinished?(self)
     }
     
-    public func writeHead(statusCode: Int, headers: [String:String]! = nil){
+    public func writeHead(statusCode: Int, headers: [String:String] = [:]){
         self.statusCode = statusCode
-        mergeHeader(headers)
+        mergeHeader(headers)	
         firstLine = "\(httpVersion) \(statusCode) \(status)" + CRLF
     }
     

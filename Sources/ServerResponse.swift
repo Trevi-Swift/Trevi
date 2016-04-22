@@ -10,11 +10,7 @@ import Foundation
 
 // Make a response of user requests.
 public class ServerResponse: OutgoingMessage{
-    //for Lime
-    public var req: IncomingMessage!
-    public let startTime: NSDate
-    public var onFinished : ((ServerResponse) -> Void)?
-    
+       
     public var httpVersion: String = ""
     public var url: String!
     public var method: String!
@@ -74,8 +70,6 @@ public class ServerResponse: OutgoingMessage{
     private var firstLine: String!
     
     public init(socket: Socket) {
-        startTime = NSDate ()
-        onFinished = nil
         super.init(socket: socket)
         self._body = ""
     }
@@ -88,8 +82,6 @@ public class ServerResponse: OutgoingMessage{
         }
     
         self._end(result)
-        
-        onFinished?(self)
     }
     
     public func writeHead(statusCode: Int, headers: [String:String] = [:]){

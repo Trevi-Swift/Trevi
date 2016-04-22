@@ -16,8 +16,9 @@ public typealias oneStringeEvent = (String) -> Void
 
 public typealias oneDataEvent = (NSData) -> Void
 
-typealias EmiiterType = ((AnyObject) -> Void)?
+typealias emitterType = ([AnyObject]) -> Void
 
+typealias AnyType = (AnyObject, AnyObject, Any?) -> Void
 
 
 /*
@@ -44,7 +45,7 @@ public class EventEmitter{
     /// - Parameter emitter: event be going to registed
     ///
     ///
-    func on(name: String, _ emitter: Any){
+    public func on(name: String, _ emitter: Any){
         
         guard events[name] == nil  else{
             print("already contain event")
@@ -60,7 +61,7 @@ public class EventEmitter{
     /// - Parameter name: The name of stored event
     ///
     ///
-    func removeEvent(name: String){
+    public func removeEvent(name: String){
         events.removeValueForKey(name)
     }
     
@@ -72,7 +73,7 @@ public class EventEmitter{
     /// - Parameter arguments: Data send on event
     ///
     ///
-    func emit(name: String, _ arguments : AnyObject...){
+    public func emit(name: String, _ arguments : AnyObject...){
         let emitter = events[name]
         
         switch emitter {
@@ -119,6 +120,9 @@ public class EventEmitter{
             
         case let callback as noParamsEvent:
             callback()
+            
+        case let callback as AnyType:
+            callback("","",nil)
             
         default:
             print("There is no event")

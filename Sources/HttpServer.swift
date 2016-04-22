@@ -134,7 +134,6 @@ public class HttpServer: Net{
                 res.header[Connection] = "close"
                 res.shouldKeepAlive = false
             }
-            res.req = req
             
             self.emit("request", req ,res)
             

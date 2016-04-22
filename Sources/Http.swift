@@ -10,7 +10,7 @@ import Libuv
 import Foundation
 
 
-public typealias HttpCallback = ( ( IncomingMessage, ServerResponse, NextCallback?) -> Void )
+public typealias HttpCallback = ( (IncomingMessage, ServerResponse, NextCallback?) -> Void )
 
 public typealias NextCallback = ()->()
 
@@ -23,7 +23,7 @@ public typealias ReceivedParams = (buffer: UnsafeMutablePointer<CChar>, length: 
 
 */
 public protocol ApplicationProtocol {
-    func createApplication() -> Any
+    func createApplication() -> HttpCallback
 }
 
 

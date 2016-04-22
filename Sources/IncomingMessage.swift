@@ -39,35 +39,16 @@ public class IncomingMessage: StreamReadable{
     
     public var hasBody: Bool!
     
-    // for lime (not fixed)
-    public var baseUrl: String! = ""
-    public var route: AnyObject!
-    public var originUrl: String! = ""
-    public var params: [String: String]!
-    public var json: [String: String]!
-    public var body: [String: String]!
-    public var bodyText: String!
-    
-    public var files: [String: File]!
-    
-    public var app: AnyObject!
-    
-    public let startTime: NSDate
-    
     //server only
-    public var url: String!{
-        didSet{            
-            originUrl = url
-        }
-    }
+    public var url: String!
     
     
     //response only
     public var statusCode: String!
     public var client: AnyObject!
     
-    init(socket: Socket){
-        startTime = NSDate ()
+    public init(socket: Socket){
+
         super.init()
         self.socket = socket
         self.connection = socket

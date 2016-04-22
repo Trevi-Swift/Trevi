@@ -12,7 +12,7 @@ import Foundation
 
 public class OutgoingMessage {
     
-    var socket: Socket!
+    public var socket: Socket!
     public var connection: Socket!
     
     public var header: [String: String]!

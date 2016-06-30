@@ -122,7 +122,12 @@ public class EventEmitter{
             callback()
             
         case let callback as AnyType:
-            callback("","",nil)
+            #if os(Linux)
+                callback(StringWrapper(string: ""), StringWrapper(string: ""), nil)
+            #else
+                callback("" ,"", nil)
+            #endif
+
             
         default:
             print("There is no event")
